@@ -1,0 +1,20 @@
+server:
+  port: 8000
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/amigoscode
+    username: postgres
+    password: 1234
+    driverClassName: org.postgresql.Driver
+  flyway:
+    url: jdbc:postgresql://localhost:5432/amigoscode
+    user: postgres
+    password: 1234
