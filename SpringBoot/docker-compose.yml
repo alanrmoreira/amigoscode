@@ -1,6 +1,22 @@
 version: '3.4' 
 
 services:
+
+  postgresql:
+    image: postgres:latest
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: amigoscode
+    ports:
+      - 5432:5432
+    expose:
+      - 5432:5432
+    networks:
+      - amigoscode
+
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4
@@ -11,23 +27,31 @@ services:
       - TZ=America/Sao_Paulo
     ports:
       - 5050:80
+    depends_on:
+      - postgresql
     networks:
       - amigoscode 
-      
-  postgresql:
-    image: postgres:latest
+
+  students:
+    image: alanrmoreira/amigoscode:0.0.1-SNAPSHOT
     restart: always
+    build:
+      context: .
+      dockerfile: SpringBoot/Dockerfile
     environment:
-      TZ: America/Sao_Paulo
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      SPRING.DATASOURCE.URL: jdbc:postgresql://postgresql:5432/amigoscode
+      SPRING.DATASOURCE.USERNAME: postgres
+      SPRING.DATASOURCE.PASSWORD: 1234
+      SPRING.FLYWAY.URL: jdbc:postgresql://postgresql:5432/amigoscode
+      SPRING.FLYWAY.USER: postgres
+      SPRING.FLYWAY.PASSWORD: 1234
     ports:
-    - 5432:5432
-    expose:
-      - 5432:5432      
+      - 8000:8000
+    depends_on:
+      - postgresql
+      -   pgadmin
     networks:
-      - default
-      - amigoscode 
+      - amigoscode
 
 networks:
   amigoscode:

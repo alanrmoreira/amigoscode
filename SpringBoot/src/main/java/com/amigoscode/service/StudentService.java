@@ -27,13 +27,12 @@ public class StudentService {
 
     public StudentModel newStudent(StudentModel studentModel) {
 
-        Optional<StudentModel> student = repository.findStudentByEmail(studentModel.getEmail());
+       Optional<StudentModel> student = repository.findStudentByEmail(studentModel.getEmail());
 
-        if (student.isPresent()) {
-            throw new IllegalStateException("User already exists");
-        }else{
-            return repository.save(studentModel);
-        }
+       if (student.isPresent()){
+           throw new IllegalStateException("User already exists");
+       }
+        return repository.save(studentModel);
     }
 
     public void deleteUser(Long id) {
