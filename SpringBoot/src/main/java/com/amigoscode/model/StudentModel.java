@@ -2,6 +2,7 @@ package com.amigoscode.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity(name = "students")
 public class StudentModel {
@@ -16,26 +17,24 @@ public class StudentModel {
     @Column(nullable = false)
 //    @Temporal(TemporalType.DATE)
     private LocalDate dob;
-    @Column(nullable=false)
+    @Transient
     private Integer age;
 
     public StudentModel() {
     }
 
-    public StudentModel(Long id, String name, String email, LocalDate dob, Integer age) {
+    public StudentModel(Long id, String name, String email, LocalDate dob) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
     }
 
-    public StudentModel(String name, String email, LocalDate dob, Integer age) {
+    public StudentModel(String name, String email, LocalDate dob) {
 
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
     }
 
     public Long getId() {
@@ -71,7 +70,8 @@ public class StudentModel {
     }
 
     public Integer getAge() {
-        return age;
+
+        return Period.between(this.getDob(), LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
